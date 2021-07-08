@@ -4,6 +4,13 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'sortByDate',
 })
 export class SortByDatePipe implements PipeTransform {
+  /**
+   * Sort the provided data in ascending order.
+   * @param {*} array
+   * @param {*} fieldName
+   * @return {*}  {*}
+   * @memberof SortByDatePipe
+   */
   transform(array: any, fieldName: any): any {
     if (array?.length) {
       array.sort((a: any, b: any) => {

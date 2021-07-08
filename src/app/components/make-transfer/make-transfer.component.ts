@@ -143,6 +143,7 @@ export class MakeTransferComponent implements OnInit, OnDestroy {
   @Output() updateAfterSubmit: EventEmitter<any> = new EventEmitter();
 
   @ViewChild('reviewTransfer') reviewTransfer!: ReviewTransferComponent;
+  
   constructor(
     private formBuilder: FormBuilder,
     private manageUser: ManageUserService
@@ -150,6 +151,11 @@ export class MakeTransferComponent implements OnInit, OnDestroy {
     this.subscriptions = new Subscription();
   }
 
+  /**
+   * Initialize the user and account details on load.
+   * Create a form having Account transfer details and provide validations.
+   * @memberof MakeTransferComponent
+   */
   ngOnInit(): void {
     const currentUser = this.manageUser.getUser();
     this.totalBalance = currentUser.balance;
@@ -171,7 +177,11 @@ export class MakeTransferComponent implements OnInit, OnDestroy {
     });
     this.subscribeToBalanceUpdate();
   }
-  // Create a subscription to fetch updated balance
+  
+  /**
+   * Subscribe to an Observable which handles the change in account balance.
+   * @memberof MakeTransferComponent
+   */
   subscribeToBalanceUpdate() {
     this.subscriptions.add(
       this.manageUser.balanceObservable.subscribe((balance: number) => {
@@ -190,7 +200,7 @@ export class MakeTransferComponent implements OnInit, OnDestroy {
       })
     );
   }
-  /* Events <-- */
+
   onSubmit(event: any) {
     const enteredAmount = this.moneyTransfer.get("amount")?.value;
     if ((enteredAmount + Constants.thresholdAmount) > this.totalBalance) {
@@ -210,19 +220,22 @@ export class MakeTransferComponent implements OnInit, OnDestroy {
     };
     this.reviewTransfer?.openModal(transferData);
   }
+  /**
+   * This is a callback from the 'ReviewTransferComponent' asking to process the transcation.
+   * @param {Transfer} transferData
+   * @memberof MakeTransferComponent
+   */
   onSubmitAfterReview(transferData: Transfer) {
     this.reset(); // Reset to-account and amount 
     this.updateAfterSubmit?.emit(transferData);
   }
-  /* Events --> */
-  /* Reset <-- */
+
   reset() {
     this.moneyTransfer.controls.toAccount.reset();
     this.moneyTransfer.controls.amount.reset();
   }
-  /* Reset --> */
+
   ngOnDestroy() {
-    // Unsubscribe available subscriptions
     this.subscriptions.unsubscribe();
   }
 }

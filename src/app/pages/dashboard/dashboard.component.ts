@@ -92,11 +92,15 @@ export class DashboardComponent {
 
   constructor(private manageUser: ManageUserService) {}
 
-  /* Child Events <-- */
+  /**
+   * This is a Callback from the Child 'MakeTransferComponent'.
+   * Update the Transaction History Data, by adding a new transaction.
+   * @param {*} data
+   * @memberof DashboardComponent
+   */
   updateTransactionHistory(data: any) {
     const transferData: Transfer = data;
     this.manageUser.updateUserBalance(transferData.amount);
     this.transactionHistory?.addNewTransaction(transferData);
   }
-  /* Child Events --> */
 }

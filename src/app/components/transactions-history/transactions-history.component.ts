@@ -153,6 +153,7 @@ export class TransactionsHistoryComponent implements OnInit {
   transactions: Array<Transaction>;
   defaultTransactions: Array<Transaction>;
   private filterValue: string = '';
+
   constructor(private apiMapping: ApiMappingService, private manageUser: ManageUserService) {
     this.transactions = new Array<Transaction>();
     this.defaultTransactions = new Array<Transaction>();
@@ -161,16 +162,18 @@ export class TransactionsHistoryComponent implements OnInit {
   ngOnInit(): void {
     this.getTransactionHistory();
   }
-  /* API Calls <-- */
-  // Get Transactions list from API OR Mock if API not available
+
+  /**
+   * Call the Get Transaction API.
+   * Fetch data and then call the load method.
+   * @memberof TransactionsHistoryComponent
+   */
   getTransactionHistory() {
     this.apiMapping.getTransacations().subscribe(
       (data: any) => {
         if (data?.length) {
-          // Call API to fetch transactions
           this.loadData(data);
         } else {
-          // Load data from mock
           this.loadData(Mock.transactionsHistory);
         }
       },
@@ -180,9 +183,12 @@ export class TransactionsHistoryComponent implements OnInit {
       }
     );
   }
-  /* API Calls --> */
-  /* MISC <-- */
-  // Update the transactions local list as per the interface
+  /**
+   * Load the historical transactions in local variable.
+   * Bind the data to transactions object.
+   * @param {*} data
+   * @memberof TransactionsHistoryComponent
+   */
   loadData(data: any) {
     const arrTransactions: Array<any> = data?.data;
     const _transactions: Array<any> = new Array<any>();
@@ -217,7 +223,7 @@ export class TransactionsHistoryComponent implements OnInit {
       this.defaultTransactions = [..._transactions]; // Deep clone
     }
   }
-  // Filter the transactions list as per the filter value
+
   updateTransactions() {
     const filteredData = this.defaultTransactions.filter(
       (element: Transaction) => {
@@ -230,9 +236,13 @@ export class TransactionsHistoryComponent implements OnInit {
     );
     this.transactions = [...filteredData];
   }
-  /* MISC --> */
-  /* Parent Events <-- */
-  // Whenever make transfer happens, add it as a new transaction to the list
+
+  /**
+   * This is called from the parent component.
+   * Whenever a transaction occur, add it as a new transaction to the list.
+   * @param {Transfer} data
+   * @memberof TransactionsHistoryComponent
+   */
   addNewTransaction(data: Transfer) {
     const currentUser = this.manageUser.getUser();
     const date = moment.utc(new Date()).format('YYYY-MM-DD');
@@ -253,17 +263,12 @@ export class TransactionsHistoryComponent implements OnInit {
       currency: (currentUser.currency === 'EUR' ? '€' : (currentUser.currency || 'EUR')),
       type: TransactionType.onlineTransfer
     };
-    // Update main dataset of transactions
     this.defaultTransactions.push({...transaction});
-    // Update transactions data as per the filter
     this.updateTransactions();
   }
-  /* Parent Events --> */
-  /* Child Events <-- */
-  // Handle the filter value change
+
   onInputChange(event: any) {
     this.filterValue = event.target.value;
     this.updateTransactions();
   }
-  /* Child Events --> */
 }

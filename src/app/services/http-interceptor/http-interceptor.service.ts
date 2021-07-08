@@ -10,6 +10,13 @@ export const DEFAULT_TIMEOUT = new InjectionToken<number>('defaultTimeout');
 export class HttpInterceptorService implements HttpInterceptor {
   constructor() {}
 
+  /**
+   * Intercept the HTTP Requests to update HTTP Headers
+   * @param {HttpRequest<any>} req
+   * @param {HttpHandler} next
+   * @return {*}  {Observable<HttpEvent<any>>}
+   * @memberof HttpInterceptorService
+   */
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler

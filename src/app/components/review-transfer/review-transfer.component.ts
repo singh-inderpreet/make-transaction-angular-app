@@ -67,7 +67,6 @@ export class ReviewTransferComponent {
 
   constructor(private modalService: NgbModal) {}
 
-  /* Modal Actions <-- */
   openModal(data: Transfer) {
     this.transferData = data;
     if (this.transferData.currency === 'EUR') {
@@ -75,12 +74,13 @@ export class ReviewTransferComponent {
     }
     this.modalService.open(this.reviewTransferModal, { centered: true });
   }
+
   cancel() {
     this.modalService.dismissAll();
   }
+
   submit() {
     this.submitReview?.emit(this.transferData);
     this.modalService.dismissAll();
   }
-  /* Modal Actions --> */
 }

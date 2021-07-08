@@ -8,9 +8,15 @@ import { User } from 'src/app/models/user.model';
 export class ManageUserService {
   user!: User;
   balanceObservable: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+
   constructor() {
     this.initUser();
   }
+  /**
+   * Initialize the User details for the first time
+   * For now, instatiating with some dummy values.
+   * @memberof ManageUserService
+   */
   initUser() {
     const myInitDetails: User = {
       name: 'My Personal Account',
@@ -21,15 +27,18 @@ export class ManageUserService {
     };
     this.setUser(myInitDetails);
   }
+
   getUser() {
     return this.user;
   }
   setUser(data: User) {
     this.user = data;
   }
+
   getUserBalance() {
     return this.user.balance;
   }
+ 
   updateUserBalance(transferedAmount: number) {
     if (this.user.balance! < 0) {
       return;
